@@ -25,7 +25,29 @@ $ dotnet run
 
 Open http://localhost:5000/ in a browser.
 
-__[See Installation](https://github.com/Shazwazza/Smidge/wiki/installation) for full configuration details__
+__[See Installation](https://github.com/Shazwazza/Smidge/wiki/installation) of the original Smidge for ASP.NET 5 for full configuration details__ except install from source, use:
+
+```
+@inject Smidge.SmidgeHelper Smidge
+@addTagHelper *, Smidge
+```
+
+(without quotes), and register a few services used by Smidge for ASP.NET Core 1.0:
+
+```
+        public void ConfigureServices(IServiceCollection services)
+        {
+			...
+			
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
+
+            services.AddSmidge(_config)...
+			
+			...
+		}
+```
 
 ## Current status
 
