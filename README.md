@@ -10,14 +10,18 @@ _Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 a
 
 Make sure NuGet uses these package sources:
 
+```
   https://www.myget.org/F/aspnetvnext/api/v3/index.json
   https://myget.org/F/applicationinsights-sdk-labs/api/v3/index.json
+```
 
 Clone the Git repository. Then:
 
+```
 $ cd Smidge\src\Smidge.Web
 $ dotnet restore
 $ dotnet run
+```
 
 Open http://localhost:5000/ in a browser.
 
@@ -25,10 +29,12 @@ __[See Installation](https://github.com/Shazwazza/Smidge/wiki/installation) for 
 
 ## Current status
 
+```
 Builds using the above specified versions of .NET Core 1.0 and ASP.NET Core 1.0.
 Later versions may or may not build or run correctly.
 Demo application runs.
 Tests are not ported.
+```
 
 ##Usage
 
