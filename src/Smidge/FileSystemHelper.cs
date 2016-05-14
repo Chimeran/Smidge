@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,24 +8,22 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Smidge
 {
     public sealed class FileSystemHelper
     {
-        private IApplicationEnvironment _appEnv;
         private ISmidgeConfig _config;
         private readonly IUrlHelper _urlHelper;
         private IHostingEnvironment _hostingEnv;
         private ConcurrentDictionary<string, SemaphoreSlim> _fileLocker = new ConcurrentDictionary<string, SemaphoreSlim>();
         private IFileProvider _fileProvider;
 
-        public FileSystemHelper(IApplicationEnvironment appEnv, IHostingEnvironment hostingEnv, ISmidgeConfig config, IUrlHelper urlHelper, IFileProvider fileProvider)
+        public FileSystemHelper(IHostingEnvironment hostingEnv, ISmidgeConfig config, IUrlHelper urlHelper, IFileProvider fileProvider)
         {
-            _appEnv = appEnv;
             _config = config;
             _urlHelper = urlHelper;
             _hostingEnv = hostingEnv;
@@ -142,14 +140,14 @@ namespace Smidge
         /// <returns></returns>
         public string MapPath(string contentFile)
         {
-            var path = _hostingEnv.MapPath(contentFile).TrimStart('\\');
-            var file = _fileProvider.GetFileInfo(path);
+			var file = _hostingEnv.WebRootFileProvider.GetFileInfo(contentFile);
             if (file.Exists)
             {
                 return file.PhysicalPath;
             }
 
-            throw new FileNotFoundException($"No such file exists {path} (mapped from {contentFile})", path);
+            throw new FileNotFoundException($"No such file exists {file.PhysicalPath} (mapped from {contentFile})",
+				file.PhysicalPath);
         }
 
         /// <summary>
@@ -213,7 +211,7 @@ namespace Smidge
         {
             get
             {
-                return Path.Combine(_appEnv.ApplicationBasePath, _config.DataFolder, "Cache", _config.ServerName, _config.Version);
+                return Path.Combine(_hostingEnv.ContentRootPath, _config.DataFolder, "Cache", _config.ServerName, _config.Version);
             }
         }
 

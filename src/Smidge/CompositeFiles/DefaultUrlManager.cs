@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Smidge.Models;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Linq;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Smidge.Options;
 
@@ -16,21 +18,25 @@ namespace Smidge.CompositeFiles
     {
         private ISmidgeConfig _config;
         private IHasher _hasher;
-        private readonly IUrlHelper _urlHelper;
+        private readonly IUrlHelperFactory _urlHelperFactory;
+		private readonly IActionContextAccessor _actionContextAccessor;
         private UrlManagerOptions _options;
 
-        public DefaultUrlManager(IOptions<SmidgeOptions> options, ISmidgeConfig config, IHasher hasher, IUrlHelper urlHelper)
+        public DefaultUrlManager(IOptions<SmidgeOptions> options, ISmidgeConfig config, IHasher hasher,
+			IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
         {
             _hasher = hasher;
-            _urlHelper = urlHelper;
+            _urlHelperFactory = urlHelperFactory;
+			_actionContextAccessor = actionContextAccessor;
             _options = options.Value.UrlOptions;
             _config = config;
         }
 
         public string GetUrl(string bundleName, string fileExtension)
         {
+			var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
             const string handler = "~/{0}/{1}{2}.v{3}";
-            return _urlHelper.Content(
+            return urlHelper.Content(
                 string.Format(
                     handler,
                     _options.BundleFilePath,
@@ -141,9 +147,9 @@ namespace Smidge.CompositeFiles
         private string GetCompositeUrl(string fileKey, string fileExtension)
         {
             //Create a delimited URL query string
-
+			var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
             const string handler = "~/{0}/{1}{2}.v{3}";
-            return _urlHelper.Content(
+            return urlHelper.Content(
                 string.Format(
                     handler,
                     _options.CompositeFilePath,

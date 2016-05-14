@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Smidge.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Smidge.FileProcessors;
 
 namespace Smidge

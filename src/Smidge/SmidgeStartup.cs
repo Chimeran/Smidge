@@ -2,15 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Smidge.CompositeFiles;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Routing;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Hosting;
 using System.Runtime.CompilerServices;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Mvc;
-//using Microsoft.AspNet.NodeServices;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+//using Microsoft.AspNetCore.NodeServices;
 using Smidge.Models;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Smidge.Options;
 using Smidge.FileProcessors;
@@ -35,8 +37,11 @@ namespace Smidge
             {
                 var hosting = p.GetRequiredService<IHostingEnvironment>();
                 var provider = fileProvider ?? hosting.WebRootFileProvider;
-                return new FileSystemHelper(p.GetRequiredService<IApplicationEnvironment>(), hosting,
-                    p.GetRequiredService<ISmidgeConfig>(), p.GetRequiredService<IUrlHelper>(), provider);
+				var urlHelperFactory = p.GetRequiredService<IUrlHelperFactory>();
+				var actionContextAccessor = p.GetRequiredService<IActionContextAccessor>();
+				var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+                return new FileSystemHelper(hosting, p.GetRequiredService<ISmidgeConfig>(),
+					urlHelper, provider);
             });
 
 
@@ -45,7 +50,7 @@ namespace Smidge
             {
                 if (smidgeConfiguration == null)
                 {
-                    return new SmidgeConfig(p.GetRequiredService<IApplicationEnvironment>());
+                    return new SmidgeConfig(p.GetRequiredService<IHostingEnvironment>());
                 }
                 return new SmidgeConfig(smidgeConfiguration);
             });

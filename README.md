@@ -1,19 +1,34 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/y2c08r2wsqsliq7o?svg=true)](https://ci.appveyor.com/project/Shandem/smidge)
-
 ![Smidge](assets/logosmall.png?raw=true) Smidge
 ======
 
-A lightweight **ASP.Net 5** library for _runtime_ CSS and JavaScript file management, minification, combination & compression. 
+A lightweight **ASP.NET Core 1.0** library for _runtime_ CSS and JavaScript file management, minification, combination & compression.
+Ported to ASP.NET Core 1.0 by Casper Spanggaard from Smidge for ASP.Net 5 by Shannon Deminick. See https://github.com/Shazwazza/Smidge.
 
 ## Install
 
-_Currently supporting DNX 4.5.1 & DNXCore 5.0, built against **rc1-final**_
+_Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 and ASP.NET Core 1.0 RC2 preview of 05/14/2016_
 
-Nuget:
+Make sure NuGet uses these package sources:
 
-    Install-Package Smidge -Pre
+  https://www.myget.org/F/aspnetvnext/api/v3/index.json
+  https://myget.org/F/applicationinsights-sdk-labs/api/v3/index.json
+
+Clone the Git repository. Then:
+
+$ cd Smidge\src\Smidge.Web
+$ dotnet restore
+$ dotnet run
+
+Open http://localhost:5000/ in a browser.
 
 __[See Installation](https://github.com/Shazwazza/Smidge/wiki/installation) for full configuration details__
+
+## Current status
+
+Builds using the above specified versions of .NET Core 1.0 and ASP.NET Core 1.0.
+Later versions may or may not build or run correctly.
+Demo application runs.
+Tests are not ported.
 
 ##Usage
 
@@ -83,6 +98,7 @@ I haven't had time to document all of the features and extensibility points just
 ## Copyright & Licence
 
 &copy; 2016 by Shannon Deminick
+&copy; 2016 by Casper Spanggaard
 
 This is free software and is licensed under the [MIT License](http://opensource.org/licenses/MIT)
 

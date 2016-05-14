@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Smidge.Models;
 using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc.Filters;
-using Microsoft.AspNet.Mvc.Core;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Core;
 
 namespace Smidge.Controllers
 {
@@ -15,6 +15,14 @@ namespace Smidge.Controllers
     /// </summary>
     public sealed class CompositeFileCacheFilterAttribute : Attribute, IFilterFactory, IOrderedFilter
     {
+		public bool IsReusable
+		{
+			get
+			{
+				return true;
+			}
+		}
+
         public int Order { get; set; }
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Smidge
@@ -21,11 +22,11 @@ namespace Smidge
         /// Constructor that will use a smidge.json configuration file in env.ApplicationBasePath
         /// </summary>
         /// <param name="env"></param>
-        public SmidgeConfig(IApplicationEnvironment env)
+        public SmidgeConfig(IHostingEnvironment env)
         {
             //  use smidge.json file if it exists for backwards compatibility.
             var cfg = new ConfigurationBuilder()
-              .SetBasePath(env.ApplicationBasePath)
+              .SetBasePath(env.ContentRootPath)
               //.AddEnvironmentVariables()                    
               .AddJsonFile("smidge.json");
             _config = cfg.Build();

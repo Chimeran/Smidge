@@ -1,8 +1,15 @@
 ﻿using System.Linq;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Smidge;
 using Smidge.Options;
 using Smidge.Models;
 using Smidge.FileProcessors;
@@ -29,8 +36,14 @@ namespace Smidge.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddMvcCore()
+				.AddJsonFormatters();
 
-            services.AddMvc();
+			services.AddMvc();
+
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
             // Or use services.AddSmidge() to test from smidge.json config.
             services.AddSmidge(_config) 
@@ -64,9 +77,9 @@ namespace Smidge.Web
                 });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseIISPlatformHandler();
+            loggerFactory.AddConsole(LogLevel.Debug);
 
             // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())

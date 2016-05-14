@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Razor.Runtime.TagHelpers;
-using Microsoft.AspNet.Razor.TagHelpers;
-using Microsoft.Extensions.WebEncoders;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Smidge.TagHelpers
 {
@@ -15,9 +15,9 @@ namespace Smidge.TagHelpers
     {
         private readonly SmidgeHelper _smidgeHelper;
         private readonly BundleManager _bundleManager;
-        private readonly IHtmlEncoder _encoder;
+        private readonly HtmlEncoder _encoder;
 
-        public SmidgeScriptTagHelper(SmidgeHelper smidgeHelper, BundleManager bundleManager, IHtmlEncoder encoder)
+        public SmidgeScriptTagHelper(SmidgeHelper smidgeHelper, BundleManager bundleManager, HtmlEncoder encoder)
         {
             _smidgeHelper = smidgeHelper;
             _bundleManager = bundleManager;
@@ -50,7 +50,7 @@ namespace Smidge.TagHelpers
                         builder.WriteTo(writer, _encoder);
                     }
                     writer.Flush();
-                    output.PostElement.SetContent(new HtmlString(writer.ToString()));
+                    output.PostElement.SetContent(writer.ToString());
                 }
                 //This ensures the original tag is not written.
                 output.TagName = null;
@@ -58,7 +58,7 @@ namespace Smidge.TagHelpers
             else
             {
                 //use what is there
-                output.Attributes["src"] = Source;
+                output.Attributes.SetAttribute(new TagHelperAttribute("src", Source));
             }
         }
     }

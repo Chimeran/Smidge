@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Smidge.Models;
 using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Smidge.Controllers
 {
@@ -12,6 +12,14 @@ namespace Smidge.Controllers
     /// </summary>
     public class CheckNotModifiedAttribute : Attribute, IFilterFactory, IOrderedFilter
     {
+		public bool IsReusable
+		{
+			get
+			{
+				return true;
+			}
+		}
+
         public int Order { get; set; }
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
@@ -63,7 +71,7 @@ namespace Smidge.Controllers
 
             private void ReturnNotModified(ActionExecutedContext context)
             {
-                context.Result = new HttpStatusCodeResult(HttpConstants.NotModified304);
+                context.Result = new StatusCodeResult(HttpConstants.NotModified304);
             }
         }
     }

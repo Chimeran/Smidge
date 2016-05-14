@@ -2,7 +2,7 @@
 using Smidge.Models;
 using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Smidge.Controllers
 {
@@ -11,6 +11,14 @@ namespace Smidge.Controllers
     /// </summary>
     public sealed class AddExpiryHeadersAttribute : Attribute, IFilterFactory, IOrderedFilter
     {
+		public bool IsReusable
+		{
+			get
+			{
+				return true;
+			}
+		}
+		
         public int Order { get; set; }
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
