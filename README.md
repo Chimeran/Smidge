@@ -6,7 +6,7 @@ Ported to ASP.NET Core 1.0 by Casper Spanggaard from Smidge for ASP.Net 5 by Sha
 
 ## Install
 
-_Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 and ASP.NET Core 1.0 RC2
+_Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 and ASP.NET Core 1.0 RC2_
 
 Clone the Git repository. Then:
 
