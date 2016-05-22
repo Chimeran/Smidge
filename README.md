@@ -6,14 +6,7 @@ Ported to ASP.NET Core 1.0 by Casper Spanggaard from Smidge for ASP.Net 5 by Sha
 
 ## Install
 
-_Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 and ASP.NET Core 1.0 RC2 preview of 05/14/2016_
-
-Make sure NuGet uses these package sources:
-
-```
-  https://www.myget.org/F/aspnetvnext/api/v3/index.json
-  https://myget.org/F/applicationinsights-sdk-labs/api/v3/index.json
-```
+_Builds using .NET Core command-line (CLI) tools version 1.0.0-preview1-002702 and ASP.NET Core 1.0 RC2
 
 Clone the Git repository. Then:
 
